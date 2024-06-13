@@ -79,3 +79,50 @@ app.put("/userUpdate/:id", (req, res) => {
 });
 
 
+
+app.delete('/deletUser/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const user = users.find((user) => user.id === id);
+
+    if (!user) return res.status(401).send('user not found');
+
+    const UserIndex = users.findIndex((user) => user.id === id);
+    users.splice(UserIndex, 1);
+
+    res.status(200).send("User Deleted successfully").json(user)
+
+})
+
+
+app.post('/aiApi', async (req, res) => {
+    const { string } = req.body;
+    
+
+    if (!string) {
+        return res.status(401).json({
+            error: 'String parameter is required'
+        });
+    }
+
+    // Define the URL of the AI server
+    const aiServerUrl = `https://ydegrees.pearlbuddy.com:8090?string=${encodeURIComponent(string)}`;
+
+    try {
+        // Make a GET request to the AI server
+        const response = await axios.get(aiServerUrl, {
+            // Disable SSL verification (not recommended for production)
+            httpsAgent: new https.Agent({ rejectUnauthorized: false })
+        });
+
+        // Process the AI server response
+        res.json({
+            success: true,
+            data: response.data
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            error: 'An error occurred while communicating with the AI server: ' + error.message
+        });
+    }
+});
