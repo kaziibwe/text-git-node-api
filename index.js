@@ -52,3 +52,30 @@ app.post("/creatUser", (req, res) => {
 })
 
 
+
+
+app.put("/userUpdate/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const user = users.find((user) => user.id === id);
+
+    if (!user) return res.status(401).send('user not found');
+
+    const { name, email, phone, subscription, password } = req.body;
+    const useUpdate = {
+        id: id,
+        name,
+        email,
+        phone,
+        subscription,
+        password
+    }
+    // users.splice(users.indexOf(user),1,useUpdate);
+
+    const UserIndex = users.findIndex((user) => user.id === id);
+    users[UserIndex] = useUpdate;
+    res.json({ users })
+
+
+});
+
+
