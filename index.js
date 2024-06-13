@@ -25,3 +25,30 @@ app.get("/user/:id", (req, res) => {
 
     res.json(user);
 })
+
+
+
+app.post("/creatUser", (req, res) => {
+    const { name, email, phone, subscription, password } = req.body;
+
+    const id = users.length + 1;
+    const newuser = {
+        id: id,
+        name,
+        email,
+        phone,
+        subscription,
+        password
+    }
+    users.push(newuser);
+    res.json([
+        {
+            "message": "user created successfully",
+            "users": newuser
+            // "users":users
+
+        }
+    ]);
+})
+
+
