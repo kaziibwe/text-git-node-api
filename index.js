@@ -23,8 +23,6 @@ app.get("/user/:id", (req, res) => {
     const user = users.find((user) => user.id === parseInt(id))
     if (!user) return res.status(401).send('user not found');
 
-    console.log("changes")
-
     res.json(user);
 })
 
